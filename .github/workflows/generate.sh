@@ -16,17 +16,17 @@
 
 set -ex
 
-SERVICE=$1
-VARIANT=$2
+#SERVICE=$1
+#VARIANT=$2
 ROOT_DIR=$(realpath $(dirname "${BASH_SOURCE[0]}")/../../../)
 
 LATEST_VARIANT=2.0.0
 
-if [[ -z "${SERVICE}" ]]
-then
-  echo "Usage: ${0} <service> [variant]"
-  exit 1
-fi
+#if [[ -z "${SERVICE}" ]]
+#then
+#  echo "Usage: ${0} <service> [variant]"
+#  exit 1
+#fi
 
 # Default to use the latest variant
 if [[ -z "${VARIANT}" ]]
@@ -38,10 +38,12 @@ fi
 python2 -m pip install --no-deps -e ${ROOT_DIR}/google-api-java-client-services/generator --user -q
 python2 -m pip install --require-hashes -r ${ROOT_DIR}/google-api-java-client-services/generator/generator_requirements.txt --user
 
-pushd ${ROOT_DIR}/discovery-artifact-manager
+#pushd ${ROOT_DIR}/discovery-artifact-manager
 
-for DISCOVERY in `ls discoveries/${SERVICE}.*.json`
-do
+#for DISCOVERY in `ls discoveries/${SERVICE}.*.json`
+#do
+SERVICE="abusiveexperiencereport"
+DISCOVERY="abusiveexperiencereport.v1.json"
   VERSION=$(basename ${DISCOVERY} | sed 's/\.json//' | cut -d. -f2-)
   TARGET_DIR=${ROOT_DIR}/google-api-java-client-services/clients/google-api-services-${SERVICE}/${VERSION}/${VARIANT}
   OUTPUT_DIR=$(mktemp -d)
@@ -68,5 +70,5 @@ do
   # Copy the latest variant's README to the main service location
   # Generation of libraries with older variants should not update the root README
   cp ${ROOT_DIR}/google-api-java-client-services/clients/google-api-services-${SERVICE}/${VERSION}/${LATEST_VARIANT}/README.md ${ROOT_DIR}/google-api-java-client-services/clients/google-api-services-${SERVICE}/${VERSION}/README.md
-done
+#done
 
